@@ -1,0 +1,81 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <title>dann.fun</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <style type="text/css">
+            * { color: #8080f0; }
+            body { background-color: #000000; margin: 0px; overflow: hidden; }
+            #info { position: absolute; top: 0px; width: 100%; padding: 5px; font-family:Monospace; font-size:13px; text-align:center; }
+        </style>
+    </head>
+    <body>
+
+        <div id="container"></div>
+        <div id="info"><a href="https://dannb.org" target="_blank">dannb.org</a></div>
+
+        <script type="text/javascript">
+
+            var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight,
+            SCREEN_WIDTH_HALF = SCREEN_WIDTH / 2, SCREEN_HEIGHT_HALF = SCREEN_HEIGHT / 2,
+            
+            texturePattern;
+
+            init();
+            setInterval(loop, 1000/60);
+
+            function init()
+            {
+                var container, svg;
+                
+                container = document.getElementById('container');
+
+                svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('width', SCREEN_WIDTH);
+                svg.setAttribute('height', SCREEN_HEIGHT);
+
+                var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+                svg.appendChild(defs);
+
+                texturePattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
+                texturePattern.setAttribute('id', 'texture');
+                texturePattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                texturePattern.setAttribute('width', 270);
+                texturePattern.setAttribute('height', 270);
+                defs.appendChild(texturePattern);
+
+                var texture = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+                texture.setAttribute('width', 270);
+                texture.setAttribute('height', 270);
+                texture.setAttribute('preserveAspectRatio', 'none');    
+                texture.setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'dannfun.png');
+                texturePattern.appendChild(texture);
+                
+                var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('width', SCREEN_WIDTH);
+                rect.setAttribute('height', SCREEN_HEIGHT);
+                rect.setAttribute('style', 'fill:url(#texture)');
+                svg.appendChild(rect);
+                
+                container.appendChild(svg);
+            }
+
+            function loop()
+            {
+                var timer, scale, tx, ty, rotate;
+            
+                timer = new Date().getTime();
+
+                tx = SCREEN_WIDTH_HALF + Math.sin(timer * 0.0001) * 256;
+                ty = SCREEN_HEIGHT_HALF + Math.cos(timer * 0.0002) * 256;
+                scale = (Math.sin(timer * 0.0002) + 1.1) * 3;
+                rotate = Math.cos(timer * 0.0001) * 360;            
+
+                texturePattern.setAttribute('patternTransform', 'translate(' + tx + ', ' + ty + ') scale(' + scale + ') rotate( ' + rotate + ')');
+            }
+    
+        </script>
+    </body>
+</html>

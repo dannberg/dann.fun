@@ -1,0 +1,17 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# macOS icon files
+Icon?
+._*
+
+# macOS specific resource forks
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+._.Trashes
+
+# macOS cache files
+Thumbs.db

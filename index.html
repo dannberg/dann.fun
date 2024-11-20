@@ -1,0 +1,8 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>dann.fun</title>
+<style>body{margin:0;overflow:hidden;height:100vh}#info{position:absolute;top:0;width:100%;padding:5px;font-family:Monospace;font-size:13px;text-align:center;color:#8080f0}.bouncer{position:absolute;width:300px;height:300px;object-fit:contain}</style><link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png"><link rel="manifest" href="favicon/site.webmanifest"></head><body>
+<div id="info"><a href="https://dannb.org">dannb.org</a></div>
+<script>
+function createBouncers(count){for(let i=0;i<count;i++){const bouncer=document.createElement('img');bouncer.src='dann.png';bouncer.classList.add('bouncer');document.body.appendChild(bouncer);
+let x=Math.random()*(window.innerWidth-300);let initialY=Math.random()*(window.innerHeight/2);let y=initialY;let dx=(Math.random()*10)-5;let dy=0;const gravity=0.5;
+function animate(){dy+=gravity;x+=dx;y+=dy;if(x+dx>window.innerWidth-300||x+dx<0){dx=-dx;}if(y+dy>window.innerHeight-300){y=window.innerHeight-300;dy=-(Math.sqrt(2*gravity*initialY));}
+bouncer.style.transform=`translate(${x}px, ${y}px)`;requestAnimationFrame(animate);}animate();}}createBouncers(10);</script></body></html>
