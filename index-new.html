@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Bouncing Images</title>
+<style>body{margin:0;overflow:hidden;height:100vh}#info{position:absolute;top:0;width:100%;padding:5px;font-family:Monospace;font-size:13px;text-align:center;color:#8080f0}.bouncer{position:absolute;width:300px;height:300px;object-fit:contain;cursor:move}</style><script src="fun.js" defer></script></head><body>
+<div id="info"><a href="https://dannb.org">dannb.org</a></div>
+<script>
+function createBouncers(count){
+    for(let i=0;i<count;i++){
+        const bouncer=document.createElement('img');
+        bouncer.src='dann.png';
+        bouncer.classList.add('bouncer');
+        document.body.appendChild(bouncer);
+
+        let x=Math.random()*(window.innerWidth-300);
+        let initialY=Math.random()*(window.innerHeight/2);
+        let y=initialY;
+        let dx=(Math.random()*10)-5;
+        let dy=0;
+        const gravity=0.5;
+        let isDragging=false;
+        let dropHeight=initialY;
+        let offsetX, offsetY;
+
+        bouncer.addEventListener('mousedown', (e) => {
+            isDragging=true;
+            offsetX=e.clientX-x;
+            offsetY=e.clientY-y;
+            dx=0;
+            dy=0;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if(isDragging){
+                x=e.clientX-offsetX;
+                y=e.clientY-offsetY;
+                bouncer.style.transform=`translate(${x}px, ${y}px)`;
+            }
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if(isDragging){
+                isDragging=false;
+                dropHeight=y;
+                dx=(e.clientX-x)/50;
+            }
+        });
+
+        function animate(){
+            if(!isDragging){
+                dy+=gravity;
+                x+=dx;
+                y+=dy;
+
+                if(x+dx>window.innerWidth-300||x+dx<0){
+                    dx=-dx;
+                }
+
+                if(y+dy>window.innerHeight-300){
+                    y=window.innerHeight-300;
+                    dy=-(Math.sqrt(2*gravity*(window.innerHeight-300-dropHeight)));
+                    initialY=dropHeight;
+                }
+            }
+
+            bouncer.style.transform=`translate(${x}px, ${y}px)`;
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    }
+}
+
+createBouncers(10);</script></body></html>
