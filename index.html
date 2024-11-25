@@ -1,8 +1,109 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>dann.fun</title>
-<style>body{margin:0;overflow:hidden;height:100vh}#info{position:absolute;top:0;width:100%;padding:5px;font-family:Monospace;font-size:13px;text-align:center;color:#8080f0}.bouncer{position:absolute;width:300px;height:300px;object-fit:contain}</style><link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png"><link rel="manifest" href="favicon/site.webmanifest"></head><body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>dann.fun</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
+        }
+        #info {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            padding: 5px;
+            font-family: Monospace;
+            font-size: 13px;
+            text-align: center;
+            color: #8080f0;
+        }
+        .bouncer {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            object-fit: contain;
+            cursor: grab;
+        }
+    </style>
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/site.webmanifest">
+</head>
+<body>
 <div id="info"><a href="https://dannb.org">dannb.org</a></div>
 <script>
-function createBouncers(count){for(let i=0;i<count;i++){const bouncer=document.createElement('img');bouncer.src='dann.png';bouncer.classList.add('bouncer');document.body.appendChild(bouncer);
-let x=Math.random()*(window.innerWidth-300);let initialY=Math.random()*(window.innerHeight/2);let y=initialY;let dx=(Math.random()*10)-5;let dy=0;const gravity=0.5;
-function animate(){dy+=gravity;x+=dx;y+=dy;if(x+dx>window.innerWidth-300||x+dx<0){dx=-dx;}if(y+dy>window.innerHeight-300){y=window.innerHeight-300;dy=-(Math.sqrt(2*gravity*initialY));}
-bouncer.style.transform=`translate(${x}px, ${y}px)`;requestAnimationFrame(animate);}animate();}}createBouncers(10);</script></body></html>
+    function createBouncers(count) {
+        for (let i = 0; i < count; i++) {
+            const bouncer = document.createElement('img');
+            bouncer.src = 'dann.png';
+            bouncer.classList.add('bouncer');
+            document.body.appendChild(bouncer);
+
+            let x = Math.random() * (window.innerWidth - 300);
+            let y = Math.random() * (window.innerHeight / 2);
+            let dx = (Math.random() * 10) - 5;
+            let dy = 0;
+            const gravity = 0.5;
+            let isDragging = false;
+
+            bouncer.style.transform = `translate(${x}px, ${y}px)`;
+
+            // Prevent default drag behavior
+            bouncer.addEventListener('dragstart', (e) => e.preventDefault());
+
+            function animate() {
+                if (!isDragging) {
+                    dy += gravity;
+                    x += dx;
+                    y += dy;
+
+                    // Bounce off the walls
+                    if (x + dx > window.innerWidth - 300 || x + dx < 0) {
+                        dx = -dx;
+                    }
+                    // Bounce off the floor
+                    if (y + dy > window.innerHeight - 300) {
+                        y = window.innerHeight - 300;
+                        dy = -(Math.sqrt(2 * gravity * (window.innerHeight / 2)));
+                    }
+                    bouncer.style.transform = `translate(${x}px, ${y}px)`;
+                }
+                requestAnimationFrame(animate);
+            }
+
+            // Drag functionality
+            bouncer.addEventListener('mousedown', (event) => {
+                isDragging = true;
+                dx = 0;
+                dy = 0;
+                const offsetX = event.clientX - x;
+                const offsetY = event.clientY - y;
+
+                function onMouseMove(e) {
+                    x = e.clientX - offsetX;
+                    y = e.clientY - offsetY;
+                    bouncer.style.transform = `translate(${x}px, ${y}px)`;
+                }
+
+                function onMouseUp() {
+                    isDragging = false;
+                    dx = (Math.random() * 10) - 5; // Apply slight angle
+                    window.removeEventListener('mousemove', onMouseMove);
+                    window.removeEventListener('mouseup', onMouseUp);
+                }
+
+                window.addEventListener('mousemove', onMouseMove);
+                window.addEventListener('mouseup', onMouseUp);
+            });
+
+            animate();
+        }
+    }
+
+    createBouncers(10);
+</script>
+</body>
+</html>
