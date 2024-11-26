@@ -1,5 +1,7 @@
 # dann.fun
 
+[![pages-build-deployment](https://github.com/dannberg/dann.fun/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/dannberg/dann.fun/actions/workflows/pages/pages-build-deployment)
+
 ## Description
 
 This repository hosts the source code for [**dann.fun**](https://dann.fun), a simple static HTML website designed for entertainment purposes. The domain, [@dann.fun](https://bsky.app/profile/dann.fun), is also used as my Bluesky profile name. The website features an entertaining and animated layout.
