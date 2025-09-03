@@ -315,84 +315,74 @@
         }
         
         // Function to load images from directory with auto-discovery
-        async function loadImagesFromDirectory() {
-            // Try to load images sequentially and only keep the ones that exist
-            const maxPossibleImages = 1000; // Upper limit for safety
+        function loadImagesFromDirectory() {
+            // Start with a reasonable range and let the browser handle missing images gracefully
+            const maxPossibleImages = 500; // Upper limit for safety
             const discoveredImages = [];
             
-            for (let i = 1; i <= maxPossibleImages; i++) {
-                const filename = `burning-man-2025-digifilm-${String(i).padStart(3, '0')}.jpg`;
-                const imageUrl = IMAGE_DIR + filename;
+            // Show loading message
+            const galleryGrid = document.getElementById('galleryGrid');
+            galleryGrid.innerHTML = '<div class="loading">Discovering images...</div>';
+            
+            // Process images in smaller batches to avoid overwhelming the browser
+            let currentBatch = 1;
+            const batchSize = 50;
+            
+            function processBatch() {
+                const startIndex = (currentBatch - 1) * batchSize + 1;
+                const endIndex = Math.min(startIndex + batchSize - 1, maxPossibleImages);
                 
-                // Test if image exists by trying to load it
-                try {
-                    const exists = await testImageExists(imageUrl);
-                    if (exists) {
-                        discoveredImages.push({
-                            url: imageUrl,
-                            filename: filename
-                        });
-                    } else {
-                        // If we find a gap, continue checking a few more to be sure
-                        let gapCount = 0;
-                        for (let j = i + 1; j <= Math.min(i + 5, maxPossibleImages); j++) {
-                            const testFilename = `burning-man-2025-digifilm-${String(j).padStart(3, '0')}.jpg`;
-                            const testUrl = IMAGE_DIR + testFilename;
-                            const testExists = await testImageExists(testUrl);
-                            if (testExists) {
-                                // Found another image, continue from here
-                                i = j - 1;
-                                break;
-                            }
-                            gapCount++;
-                        }
-                        
-                        // If we found a significant gap, we're probably done
-                        if (gapCount >= 5) {
-                            break;
-                        }
+                for (let i = startIndex; i <= endIndex; i++) {
+                    const filename = `burning-man-2025-digifilm-${String(i).padStart(3, '0')}.jpg`;
+                    const imageUrl = IMAGE_DIR + filename;
+                    
+                    discoveredImages.push({
+                        url: imageUrl,
+                        filename: filename
+                    });
+                }
+                
+                currentBatch++;
+                
+                // Continue with next batch or finish
+                if (endIndex < maxPossibleImages) {
+                    setTimeout(processBatch, 10); // Small delay to prevent blocking
+                } else {
+                    finishDiscovery();
+                }
+            }
+            
+            function finishDiscovery() {
+                // Clear loading message
+                galleryGrid.innerHTML = '';
+                
+                // Update the allImages array with discovered images
+                allImages = discoveredImages;
+                
+                // Update the page title to show actual count
+                if (allImages.length > 0) {
+                    const titleElement = document.querySelector('title');
+                    if (titleElement) {
+                        titleElement.textContent = `Burning Man 2025 (${allImages.length} photos) - dann.fun`;
                     }
-                } catch (error) {
-                    // If there's an error, assume the image doesn't exist
-                    break;
-                }
-            }
-            
-            // Update the allImages array with discovered images
-            allImages = discoveredImages;
-            
-            // Update the page title to show actual count
-            if (allImages.length > 0) {
-                const titleElement = document.querySelector('title');
-                if (titleElement) {
-                    titleElement.textContent = `Burning Man 2025 (${allImages.length} photos) - dann.fun`;
+                    
+                    // Update header to show count
+                    const headerP = document.querySelector('.header p');
+                    if (headerP) {
+                        const currentText = headerP.innerHTML;
+                        headerP.innerHTML = currentText.replace(
+                            'Burning Man 2025',
+                            `Burning Man 2025 (${allImages.length} photos)`
+                        );
+                    }
                 }
                 
-                // Update header to show count
-                const headerP = document.querySelector('.header p');
-                if (headerP) {
-                    const currentText = headerP.innerHTML;
-                    headerP.innerHTML = currentText.replace(
-                        'Burning Man 2025',
-                        `Burning Man 2025 (${allImages.length} photos)`
-                    );
-                }
+                // Start loading images
+                loadMoreImages();
             }
             
-            loadMoreImages();
-        }
-        
-        // Function to test if an image exists
-        function testImageExists(url) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve(true);
-                img.onerror = () => resolve(false);
-                img.src = url;
-                
-                // Timeout after 2 seconds to prevent hanging
-                setTimeout(() => resolve(false), 2000);
-            });
+            // Start processing batches
+            processBatch();
         }
 
         // Load more images
@@ -425,6 +415,12 @@
             img.src = imageData.url;
             img.alt = `Burning Man 2025 - Image ${index + 1}`;
             img.loading = 'lazy';
+            
+            // Handle missing images gracefully
+            img.onerror = function() {
+                // Remove the entire gallery item for missing images
+                item.remove();
+            };
             
             const downloadBtn = document.createElement('button');
             downloadBtn.className = 'download-btn';
