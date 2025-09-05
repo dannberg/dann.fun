@@ -38,9 +38,9 @@
             justify-content: center;
             transition: background-color 0.1s;
             position: fixed;
-            top: 50%;
+            top: 25vh;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             z-index: 10;
         }
 
@@ -108,11 +108,11 @@
         <h1>Shop</h1>
         <div class="shop-item" id="shopItem1">
             <button id="buyButton1">30</button>
-            <span>+2 per click</span>
+            <span id="shopItem1Desc">+2 per click</span>
         </div>
         <div class="shop-item" id="shopItem2">
             <button id="buyButton2">150</button>
-            <span>+4 per click</span>
+            <span id="shopItem2Desc">+4 per click</span>
         </div>
     </div>
 
@@ -124,6 +124,8 @@
         let shopItemVisible = false;
         let shopItem2Cost = 150;
         let shopItem2Visible = false;
+        let shopItem1Quantity = 0;
+        let shopItem2Quantity = 0;
 
         const counter = document.getElementById('counter');
         const clickButton = document.getElementById('clickButton');
@@ -132,6 +134,8 @@
         const buyButton = document.getElementById('buyButton1');
         const shopItem2 = document.getElementById('shopItem2');
         const buyButton2 = document.getElementById('buyButton2');
+        const shopItem1Desc = document.getElementById('shopItem1Desc');
+        const shopItem2Desc = document.getElementById('shopItem2Desc');
 
         clickButton.addEventListener('click', function() {
             // First click - show counter
@@ -179,6 +183,10 @@
                 // Increase click power
                 clickPower += 2;
 
+                // Increase quantity
+                shopItem1Quantity++;
+                shopItem1Desc.textContent = `+2 per click (qty: ${shopItem1Quantity})`;
+
                 // Increase cost by 1.1x and round to nearest integer
                 shopItemCost = Math.round(shopItemCost * 1.1);
                 buyButton.textContent = shopItemCost;
@@ -196,6 +204,10 @@
 
                 // Increase click power
                 clickPower += 4;
+
+                // Increase quantity
+                shopItem2Quantity++;
+                shopItem2Desc.textContent = `+4 per click (qty: ${shopItem2Quantity})`;
 
                 // Increase cost by 1.1x and round to nearest integer
                 shopItem2Cost = Math.round(shopItem2Cost * 1.1);
