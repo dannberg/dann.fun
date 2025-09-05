@@ -227,6 +227,7 @@
             background-size: 400% 400%;
             animation: gradientShift 3s ease infinite;
             display: none;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 999;
@@ -239,6 +240,18 @@
             text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
             text-align: center;
             animation: pulse 2s ease-in-out infinite;
+        }
+
+        .win-click-count {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            text-align: center;
         }
 
         @keyframes gradientShift {
@@ -267,7 +280,7 @@
             <span id="shopItem2Desc">+4 per click</span>
         </div>
         <div class="shop-item" id="shopItem3">
-            <button id="buyButton3">9000</button>
+            <button id="buyButton3">5000</button>
             <span id="shopItem3Desc">+10 per click</span>
         </div>
     </div>
@@ -293,6 +306,7 @@
     <div class="fireworks" id="fireworks"></div>
     <div class="win-screen" id="winScreen">
         <div class="win-text">Congratulations, you win!</div>
+        <div class="win-click-count" id="winClickCount"></div>
     </div>
 
     <script>
@@ -304,7 +318,7 @@
         let shopItemVisible = false;
         let shopItem2Cost = 150;
         let shopItem2Visible = false;
-        let shopItem3Cost = 9000;
+        let shopItem3Cost = 5000;
         let shopItem3Visible = false;
         let shopItem1Quantity = 0;
         let shopItem2Quantity = 0;
@@ -354,6 +368,7 @@
         const debugSave = document.getElementById('debugSave');
         const fireworks = document.getElementById('fireworks');
         const winScreen = document.getElementById('winScreen');
+        const winClickCount = document.getElementById('winClickCount');
 
         // Initialize debug window based on flag
         if (DEBUG_MODE) {
@@ -369,43 +384,58 @@
                 clickCount = newCount;
                 counter.textContent = clickCount.toLocaleString();
                 debugCount.value = '';
+                
+                // Trigger all events that would happen with this click count
+                // First click - show counter
+                if (!hasClicked) {
+                    hasClicked = true;
+                    counter.style.display = 'block';
+                }
+
+                // Update button text at 15 clicks
+                if (clickCount >= 15) {
+                    clickButton.textContent = 'Keep Clicking';
+                }
+
+                // Show shop at 30 clicks
+                if (clickCount >= 30 && !shop.style.display) {
+                    shop.style.display = 'block';
+                }
+
+                // Show shop item when it can be afforded for the first time
+                if (clickCount >= shopItemCost && !shopItemVisible) {
+                    shopItemVisible = true;
+                    shopItem.style.display = 'flex';
+                }
+
+                // Show shop item 2 when it can be afforded for the first time
+                if (clickCount >= shopItem2Cost && !shopItem2Visible) {
+                    shopItem2Visible = true;
+                    shopItem2.style.display = 'flex';
+                }
+                
+                if (clickCount >= 9800 && !shopItem3Visible) {
+                    shopItem3Visible = true;
+                    shopItem3.style.display = 'flex';
+                }
+
+                // Check for new messages to show
+                checkMessages();
+
+                // Check for win condition
+                if (clickCount >= 200000 && !gameWon) {
+                    gameWon = true;
+                    triggerWinScreen();
+                }
+
+                // Update shop item affordability
+                updateShopItemAffordability();
             }
             
             if (!isNaN(newClickPower)) {
                 clickPower = newClickPower;
                 debugClickPower.value = '';
             }
-            
-            // Update shop item visibility and affordability
-            if (clickCount >= 30 && !shop.style.display) {
-                shop.style.display = 'block';
-            }
-            
-            if (clickCount >= shopItemCost && !shopItemVisible) {
-                shopItemVisible = true;
-                shopItem.style.display = 'flex';
-            }
-            
-            if (clickCount >= shopItem2Cost && !shopItem2Visible) {
-                shopItem2Visible = true;
-                shopItem2.style.display = 'flex';
-            }
-            
-            if (clickCount >= 9800 && !shopItem3Visible) {
-                shopItem3Visible = true;
-                shopItem3.style.display = 'flex';
-            }
-            
-            // Check for new messages to show
-            checkMessages();
-
-            // Check for win condition
-            if (clickCount >= 200000 && !gameWon) {
-                gameWon = true;
-                triggerWinScreen();
-            }
-            
-            updateShopItemAffordability();
         });
 
         clickButton.addEventListener('click', function() {
@@ -629,6 +659,9 @@
         function triggerWinScreen() {
             // Hide all game elements
             document.body.style.overflow = 'hidden';
+            
+            // Update the click count display
+            winClickCount.textContent = `You've clicked the button ${manualClickCount.toLocaleString()} times`;
             
             // Start fireworks animation
             startFireworks();
