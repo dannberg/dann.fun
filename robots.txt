@@ -1,0 +1,24 @@
+User-agent: *
+Disallow: /burningman2025/
+
+# Block AI crawlers specifically
+User-agent: GPTBot
+Disallow: /burningman2025/
+
+User-agent: ChatGPT-User
+Disallow: /burningman2025/
+
+User-agent: CCBot
+Disallow: /burningman2025/
+
+User-agent: anthropic-ai
+Disallow: /burningman2025/
+
+User-agent: Claude-Web
+Disallow: /burningman2025/
+
+User-agent: PerplexityBot
+Disallow: /burningman2025/
+
+User-agent: YouBot
+Disallow: /burningman2025/
