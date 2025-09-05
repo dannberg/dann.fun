@@ -99,6 +99,35 @@
         .shop-item span {
             font-size: 14px;
         }
+
+        .messages {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 280px;
+            background-color: #fff;
+            border: 2px solid #333;
+            padding: 10px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .messages h1 {
+            font-size: 24px;
+            text-decoration: underline;
+            margin: 0 0 10px 0;
+            color: black;
+        }
+
+        .message {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 2px 0;
+            white-space: pre-wrap;
+            line-height: 1.2;
+        }
     </style>
 </head>
 <body>
@@ -116,6 +145,11 @@
         </div>
     </div>
 
+    <div class="messages" id="messages">
+        <h1>Messages</h1>
+        <div id="messagesContainer"></div>
+    </div>
+
     <script>
         let clickCount = 0;
         let clickPower = 1;
@@ -126,6 +160,8 @@
         let shopItem2Visible = false;
         let shopItem1Quantity = 0;
         let shopItem2Quantity = 0;
+        let messagesVisible = false;
+        let messageCount = 0;
 
         const counter = document.getElementById('counter');
         const clickButton = document.getElementById('clickButton');
@@ -136,6 +172,8 @@
         const buyButton2 = document.getElementById('buyButton2');
         const shopItem1Desc = document.getElementById('shopItem1Desc');
         const shopItem2Desc = document.getElementById('shopItem2Desc');
+        const messages = document.getElementById('messages');
+        const messagesContainer = document.getElementById('messagesContainer');
 
         clickButton.addEventListener('click', function() {
             // First click - show counter
@@ -168,6 +206,13 @@
             if (clickCount >= shopItem2Cost && !shopItem2Visible) {
                 shopItem2Visible = true;
                 shopItem2.style.display = 'flex';
+            }
+
+            // Show messages at 1500 clicks
+            if (clickCount >= 1500 && !messagesVisible) {
+                messagesVisible = true;
+                messages.style.display = 'block';
+                typeMessage("You're doing great...");
             }
 
             // Update shop item affordability
@@ -234,6 +279,38 @@
                     shopItem2.className = 'shop-item unaffordable';
                 }
             }
+        }
+
+        function typeMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            messagesContainer.appendChild(messageDiv);
+            messageCount++;
+            
+            // Remove oldest message if we have more than 10
+            if (messageCount > 10) {
+                const firstMessage = messagesContainer.firstChild;
+                if (firstMessage && firstMessage.className === 'message') {
+                    messagesContainer.removeChild(firstMessage);
+                    messageCount--;
+                }
+            }
+            
+            let index = 0;
+            const fullText = `> ${text}`;
+            
+            function typeChar() {
+                if (index < fullText.length) {
+                    messageDiv.textContent += fullText.charAt(index);
+                    index++;
+                    setTimeout(typeChar, 50); // 50ms delay between characters
+                } else {
+                    // Auto-scroll to bottom after typing is complete
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            }
+            
+            typeChar();
         }
     </script>
 </body>
