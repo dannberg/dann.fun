@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idle Clicker Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .counter {
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .click-button {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #333;
+            background-color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.1s;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .click-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .click-button:active {
+            background-color: #e0e0e0;
+        }
+
+        .shop {
+            display: none;
+            position: fixed;
+            bottom: 33.33vh;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .shop h1 {
+            font-size: 24px;
+            text-decoration: underline;
+            margin: 0 0 10px 0;
+            color: black;
+        }
+
+        .shop-item {
+            display: none;
+            margin: 5px 0;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shop-item button {
+            padding: 5px 10px;
+            border: 1px solid #333;
+            background-color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .shop-item.affordable {
+            color: black;
+        }
+
+        .shop-item.unaffordable {
+            color: #cccccc;
+        }
+
+        .shop-item.unaffordable button {
+            color: #cccccc;
+            border-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .shop-item span {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="counter" id="counter">0</div>
+    <button class="click-button" id="clickButton">Click</button>
+    <div class="shop" id="shop">
+        <h1>Shop</h1>
+        <div class="shop-item" id="shopItem1">
+            <button id="buyButton1">30</button>
+            <span>+2 per click</span>
+        </div>
+        <div class="shop-item" id="shopItem2">
+            <button id="buyButton2">150</button>
+            <span>+4 per click</span>
+        </div>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        let clickPower = 1;
+        let hasClicked = false;
+        let shopItemCost = 30;
+        let shopItemVisible = false;
+        let shopItem2Cost = 150;
+        let shopItem2Visible = false;
+
+        const counter = document.getElementById('counter');
+        const clickButton = document.getElementById('clickButton');
+        const shop = document.getElementById('shop');
+        const shopItem = document.getElementById('shopItem1');
+        const buyButton = document.getElementById('buyButton1');
+        const shopItem2 = document.getElementById('shopItem2');
+        const buyButton2 = document.getElementById('buyButton2');
+
+        clickButton.addEventListener('click', function() {
+            // First click - show counter
+            if (!hasClicked) {
+                hasClicked = true;
+                counter.style.display = 'block';
+            }
+
+            // Increase click count
+            clickCount += clickPower;
+            counter.textContent = clickCount;
+
+            // Update button text at 15 clicks
+            if (clickCount >= 15) {
+                clickButton.textContent = 'Keep Clicking';
+            }
+
+            // Show shop at 30 clicks
+            if (clickCount >= 30 && !shop.style.display) {
+                shop.style.display = 'block';
+            }
+
+            // Show shop item when it can be afforded for the first time
+            if (clickCount >= shopItemCost && !shopItemVisible) {
+                shopItemVisible = true;
+                shopItem.style.display = 'flex';
+            }
+
+            // Show shop item 2 when it can be afforded for the first time
+            if (clickCount >= shopItem2Cost && !shopItem2Visible) {
+                shopItem2Visible = true;
+                shopItem2.style.display = 'flex';
+            }
+
+            // Update shop item affordability
+            updateShopItemAffordability();
+        });
+
+        buyButton.addEventListener('click', function() {
+            if (clickCount >= shopItemCost) {
+                // Deduct cost from click count
+                clickCount -= shopItemCost;
+                counter.textContent = clickCount;
+
+                // Increase click power
+                clickPower += 2;
+
+                // Increase cost by 1.1x and round to nearest integer
+                shopItemCost = Math.round(shopItemCost * 1.1);
+                buyButton.textContent = shopItemCost;
+
+                // Update affordability
+                updateShopItemAffordability();
+            }
+        });
+
+        buyButton2.addEventListener('click', function() {
+            if (clickCount >= shopItem2Cost) {
+                // Deduct cost from click count
+                clickCount -= shopItem2Cost;
+                counter.textContent = clickCount;
+
+                // Increase click power
+                clickPower += 4;
+
+                // Increase cost by 1.1x and round to nearest integer
+                shopItem2Cost = Math.round(shopItem2Cost * 1.1);
+                buyButton2.textContent = shopItem2Cost;
+
+                // Update affordability
+                updateShopItemAffordability();
+            }
+        });
+
+        function updateShopItemAffordability() {
+            if (shopItemVisible) {
+                if (clickCount >= shopItemCost) {
+                    shopItem.className = 'shop-item affordable';
+                } else {
+                    shopItem.className = 'shop-item unaffordable';
+                }
+            }
+            
+            if (shopItem2Visible) {
+                if (clickCount >= shopItem2Cost) {
+                    shopItem2.className = 'shop-item affordable';
+                } else {
+                    shopItem2.className = 'shop-item unaffordable';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
