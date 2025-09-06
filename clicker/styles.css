@@ -37,6 +37,14 @@ body {
   z-index: 10;
 }
 
+.click-button.buzzing {
+  animation: buzzJiggle 0.1s infinite;
+  --jiggle-x: 2px;
+  --jiggle-x-neg: -2px;
+  --jiggle-y: 2px;
+  --jiggle-y-neg: -2px;
+}
+
 .click-button:hover {
   background-color: #f0f0f0;
 }
@@ -149,6 +157,42 @@ body {
   color: #333;
 }
 
+.debug-timer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+#timerDisplay {
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+}
+
+.timer-reset {
+  padding: 2px 6px;
+  font-size: 10px;
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.timer-reset:hover {
+  background-color: #555;
+}
+
+.debug-info {
+  font-size: 12px;
+  color: #333;
+  margin-bottom: 10px;
+  font-family: Arial, sans-serif;
+}
+
 .debug-field {
   margin: 5px 0;
 }
@@ -164,6 +208,27 @@ body {
   padding: 2px 5px;
   font-size: 12px;
   border: 1px solid #ccc;
+}
+
+.debug-button-field {
+  margin: 3px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.debug-button-field label {
+  font-size: 11px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.debug-dropdown {
+  width: 60%;
+  padding: 2px 3px;
+  font-size: 10px;
+  border: 1px solid #ccc;
+  background-color: white;
 }
 
 .debug-save {
@@ -256,4 +321,62 @@ body {
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.1); }
+}
+
+.debug-buttons-section {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 200px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.debug-button {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #333;
+  background-color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.debug-button:hover {
+  background-color: #f0f0f0;
+}
+
+.debug-button:active {
+  background-color: #e0e0e0;
+}
+
+/* Buzz jiggle animation */
+@keyframes buzzJiggle {
+  0%, 100% { 
+    transform: translateX(-50%) translateY(0px); 
+  }
+  12.5% { 
+    transform: translateX(calc(-50% + var(--jiggle-x, 2px))) translateY(var(--jiggle-y-neg, -2px)); 
+  }
+  25% { 
+    transform: translateX(calc(-50% + var(--jiggle-x-neg, -2px))) translateY(var(--jiggle-y, 2px)); 
+  }
+  37.5% { 
+    transform: translateX(calc(-50% + var(--jiggle-x-neg, -2px))) translateY(var(--jiggle-y-neg, -2px)); 
+  }
+  50% { 
+    transform: translateX(calc(-50% + var(--jiggle-x, 2px))) translateY(var(--jiggle-y, 2px)); 
+  }
+  62.5% { 
+    transform: translateX(calc(-50% + var(--jiggle-x, 2px))) translateY(var(--jiggle-y-neg, -2px)); 
+  }
+  75% { 
+    transform: translateX(calc(-50% + var(--jiggle-x-neg, -2px))) translateY(var(--jiggle-y, 2px)); 
+  }
+  87.5% { 
+    transform: translateX(calc(-50% + var(--jiggle-x-neg, -2px))) translateY(var(--jiggle-y-neg, -2px)); 
+  }
 }

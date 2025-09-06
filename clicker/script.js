@@ -15,6 +15,18 @@ let messagesVisible = false;
 let messageCount = 0;
 let gameWon = false;
 
+// Buzz functionality variables
+let buzzActive = false;
+let buzzTimer = null;
+let buzzIntensity = 0;
+let buzzStartTime = 0;
+let buzzCycleActive = false; // Tracks if the buzz cycle is running (including breaks)
+
+// Timer functionality variables
+let gameTimer = null;
+let gameStartTime = 0;
+let gameElapsedTime = 0;
+
 // Message system configuration
 const MESSAGES = [
   { threshold: 1500, text: "You're doing great...", shown: false },
@@ -53,7 +65,15 @@ const messagesContainer = document.getElementById('messagesContainer');
 const debugWindow = document.getElementById('debugWindow');
 const debugCount = document.getElementById('debugCount');
 const debugClickPower = document.getElementById('debugClickPower');
+const debugInfo = document.getElementById('debugInfo');
 const debugSave = document.getElementById('debugSave');
+const debugButton1 = document.getElementById('debugButton1');
+const debugButton2 = document.getElementById('debugButton2');
+const debugButton3 = document.getElementById('debugButton3');
+const debugButton4 = document.getElementById('debugButton4');
+const debugButton5 = document.getElementById('debugButton5');
+const timerDisplay = document.getElementById('timerDisplay');
+const timerReset = document.getElementById('timerReset');
 const fireworks = document.getElementById('fireworks');
 const winScreen = document.getElementById('winScreen');
 const winClickCount = document.getElementById('winClickCount');
@@ -61,10 +81,57 @@ const winClickCount = document.getElementById('winClickCount');
 // Initialize debug window based on flag
 if (DEBUG_MODE) {
   debugWindow.style.display = 'block';
+  // Initialize debug display values
+  updateDebugDisplay();
 }
 
-// Debug save functionality
-debugSave.addEventListener('click', function() {
+// Function to update debug display values
+function updateDebugDisplay() {
+  debugInfo.textContent = `Clicks: ${manualClickCount.toLocaleString()}, CP: ${clickPower.toLocaleString()}`;
+}
+
+// Timer functionality
+function formatTime(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+  
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+function updateTimer() {
+  if (gameStartTime > 0) {
+    const currentTime = Date.now();
+    gameElapsedTime = Math.floor((currentTime - gameStartTime) / 1000);
+    timerDisplay.textContent = formatTime(gameElapsedTime);
+  }
+}
+
+function startGameTimer() {
+  if (gameStartTime === 0) {
+    gameStartTime = Date.now();
+    gameTimer = setInterval(updateTimer, 1000);
+  }
+}
+
+function resetGameTimer() {
+  // Clear existing timer
+  if (gameTimer) {
+    clearInterval(gameTimer);
+    gameTimer = null;
+  }
+  
+  // Reset values
+  gameStartTime = Date.now();
+  gameElapsedTime = 0;
+  timerDisplay.textContent = '00:00:00';
+  
+  // Start timer again
+  gameTimer = setInterval(updateTimer, 1000);
+}
+
+// Function to handle debug save logic
+function handleDebugSave() {
   const newCount = parseInt(debugCount.value);
   const newClickPower = parseInt(debugClickPower.value);
   
@@ -124,16 +191,181 @@ debugSave.addEventListener('click', function() {
     clickPower = newClickPower;
     debugClickPower.value = '';
   }
+  
+  // Update debug display
+  updateDebugDisplay();
+}
+
+// Debug save functionality
+debugSave.addEventListener('click', handleDebugSave);
+
+// Add Enter key functionality to input fields
+debugCount.addEventListener('keypress', function(event) {
+  if (event.key === 'Enter') {
+    handleDebugSave();
+  }
+});
+
+debugClickPower.addEventListener('keypress', function(event) {
+  if (event.key === 'Enter') {
+    handleDebugSave();
+  }
+});
+
+// Timer reset button event listener
+timerReset.addEventListener('click', resetGameTimer);
+
+// Function to update debug button visibility
+function updateDebugButtonVisibility() {
+  const dropdowns = document.querySelectorAll('.debug-dropdown');
+  const buttons = [debugButton1, debugButton2, debugButton3, debugButton4, debugButton5];
+  
+  dropdowns.forEach((dropdown, index) => {
+    const value = dropdown.value;
+    const button = buttons[index];
+    
+    if (value === 'hidden') {
+      button.style.visibility = 'hidden';
+      // For buzz button (index 0), stop the buzz cycle completely
+      if (index === 0) {
+        stopBuzzCycle();
+      }
+    } else if (value === 'shown') {
+      button.style.visibility = 'visible';
+      // For buzz button (index 0), stop the buzz cycle completely and keep it stopped
+      if (index === 0) {
+        stopBuzzCycle();
+      }
+    } else if (value === 'shown-active') {
+      button.style.visibility = 'visible';
+      // For buzz button (index 0), start the buzz cycle (same as clicking buzz)
+      if (index === 0) {
+        if (!buzzCycleActive) {
+          startBuzz();
+        }
+      }
+    }
+  });
+}
+
+// Add event listeners to all debug dropdowns
+document.querySelectorAll('.debug-dropdown').forEach(dropdown => {
+  dropdown.addEventListener('change', updateDebugButtonVisibility);
+});
+
+// Buzz functionality
+function startBuzz() {
+  if (buzzActive) return;
+  
+  buzzActive = true;
+  buzzCycleActive = true; // Mark cycle as active
+  buzzStartTime = Date.now();
+  buzzIntensity = 0;
+  
+  // Update button text
+  debugButton1.textContent = 'de-buzz';
+  
+  // Start jiggling
+  clickButton.classList.add('buzzing');
+  
+  // Start intensity timer
+  buzzTimer = setInterval(updateBuzzIntensity, 100);
+}
+
+function stopBuzz() {
+  if (!buzzActive) return;
+  
+  buzzActive = false;
+  buzzIntensity = 0;
+  
+  // Update button text
+  debugButton1.textContent = 'buzz';
+  
+  // Stop jiggling
+  clickButton.classList.remove('buzzing');
+  
+  // Clear timer
+  if (buzzTimer) {
+    clearInterval(buzzTimer);
+    buzzTimer = null;
+  }
+  
+  // Reset CSS custom properties
+  clickButton.style.setProperty('--jiggle-x', '2px');
+  clickButton.style.setProperty('--jiggle-x-neg', '-2px');
+  clickButton.style.setProperty('--jiggle-y', '2px');
+  clickButton.style.setProperty('--jiggle-y-neg', '-2px');
+}
+
+function stopBuzzCycle() {
+  // Stop the entire cycle (both buzzing and any pending timers)
+  buzzCycleActive = false;
+  stopBuzz();
+  
+  // Clear any pending reset timer
+  if (buzzTimer) {
+    clearInterval(buzzTimer);
+    buzzTimer = null;
+  }
+}
+
+function updateBuzzIntensity() {
+  if (!buzzActive) return;
+  
+  const elapsed = Date.now() - buzzStartTime;
+  const progress = Math.min(elapsed / 60000, 1); // 60 seconds max
+  
+  // Calculate intensity (0 to 1)
+  buzzIntensity = progress;
+  
+  // Calculate jiggle distance (2px to 20px, making it much harder to click)
+  const baseJiggle = 2;
+  const maxJiggle = 20;
+  const jiggleDistance = baseJiggle + (buzzIntensity * (maxJiggle - baseJiggle));
+  
+  // Apply jiggle distances to the button via CSS custom properties
+  clickButton.style.setProperty('--jiggle-x', `${jiggleDistance}px`);
+  clickButton.style.setProperty('--jiggle-x-neg', `-${jiggleDistance}px`);
+  clickButton.style.setProperty('--jiggle-y', `${jiggleDistance}px`);
+  clickButton.style.setProperty('--jiggle-y-neg', `-${jiggleDistance}px`);
+}
+
+function resetBuzzTimer() {
+  stopBuzz();
+  
+  // Wait 30 seconds then start buzzing again (only if cycle is still active)
+  setTimeout(() => {
+    if (buzzCycleActive && buzzActive === false) { // Only start if cycle is active and not currently buzzing
+      startBuzz();
+    }
+  }, 30000);
+}
+
+// Buzz button click handler
+debugButton1.addEventListener('click', function() {
+  if (buzzActive) {
+    // Currently buzzing, so reset timer
+    resetBuzzTimer();
+  } else {
+    // Not buzzing, so start buzzing
+    startBuzz();
+    // Update dropdown to show cycle is active (only if not already set)
+    const buzzDropdown = document.querySelectorAll('.debug-dropdown')[0];
+    if (buzzDropdown && buzzDropdown.value !== 'shown-active') {
+      buzzDropdown.value = 'shown-active';
+    }
+  }
 });
 
 clickButton.addEventListener('click', function() {
   // Track manual clicks
   manualClickCount++;
   
-  // First click - show counter
+  // First click - show counter and start timer
   if (!hasClicked) {
     hasClicked = true;
     counter.style.display = 'block';
+    startGameTimer();
   }
 
   // Increase click count
@@ -178,6 +410,9 @@ clickButton.addEventListener('click', function() {
 
   // Update shop item affordability
   updateShopItemAffordability();
+  
+  // Update debug display
+  updateDebugDisplay();
 });
 
 buyButton.addEventListener('click', function() {
@@ -203,6 +438,9 @@ buyButton.addEventListener('click', function() {
 
     // Update affordability
     updateShopItemAffordability();
+    
+    // Update debug display
+    updateDebugDisplay();
   }
 });
 
@@ -229,6 +467,9 @@ buyButton2.addEventListener('click', function() {
 
     // Update affordability
     updateShopItemAffordability();
+    
+    // Update debug display
+    updateDebugDisplay();
   }
 });
 
@@ -255,6 +496,9 @@ buyButton3.addEventListener('click', function() {
 
     // Update affordability
     updateShopItemAffordability();
+    
+    // Update debug display
+    updateDebugDisplay();
   }
 });
 

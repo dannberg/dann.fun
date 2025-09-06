@@ -4,11 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Idle Clicker Game</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="counter" id="counter">0</div>
     <button class="click-button" id="clickButton">Click</button>
+    
+    <!-- Debug Buttons Section -->
+    <div class="debug-buttons-section" id="debugButtonsSection">
+        <button class="debug-button" id="debugButton1" style="visibility: hidden;">buzz</button>
+        <button class="debug-button" id="debugButton2" style="visibility: hidden;">Button 2</button>
+        <button class="debug-button" id="debugButton3" style="visibility: hidden;">Button 3</button>
+        <button class="debug-button" id="debugButton4" style="visibility: hidden;">Button 4</button>
+        <button class="debug-button" id="debugButton5" style="visibility: hidden;">Button 5</button>
+    </div>
     <div class="shop" id="shop">
         <h1>Shop</h1>
         <div class="shop-item" id="shopItem1">
@@ -32,6 +44,11 @@
 
     <div class="debug-window" id="debugWindow">
         <h3>Debug</h3>
+        <div class="debug-timer">
+            <span id="timerDisplay">00:00:00</span>
+            <button id="timerReset" class="timer-reset">Reset</button>
+        </div>
+        <div class="debug-info" id="debugInfo">Clicks: 0, CP: 1</div>
         <div class="debug-field">
             <label for="debugCount">Update count:</label>
             <input type="number" id="debugCount" placeholder="Enter count">
@@ -39,6 +56,46 @@
         <div class="debug-field">
             <label for="debugClickPower">Update clicks per click:</label>
             <input type="number" id="debugClickPower" placeholder="Enter click power">
+        </div>
+        <div class="debug-button-field">
+            <label>Buzz Button:</label>
+            <select class="debug-dropdown">
+                <option value="hidden">Hidden</option>
+                <option value="shown">Shown</option>
+                <option value="shown-active">Shown & Active</option>
+            </select>
+        </div>
+        <div class="debug-button-field">
+            <label>Button 2:</label>
+            <select class="debug-dropdown">
+                <option value="hidden">Hidden</option>
+                <option value="shown">Shown</option>
+                <option value="shown-active">Shown & Active</option>
+            </select>
+        </div>
+        <div class="debug-button-field">
+            <label>Button 3:</label>
+            <select class="debug-dropdown">
+                <option value="hidden">Hidden</option>
+                <option value="shown">Shown</option>
+                <option value="shown-active">Shown & Active</option>
+            </select>
+        </div>
+        <div class="debug-button-field">
+            <label>Button 4:</label>
+            <select class="debug-dropdown">
+                <option value="hidden">Hidden</option>
+                <option value="shown">Shown</option>
+                <option value="shown-active">Shown & Active</option>
+            </select>
+        </div>
+        <div class="debug-button-field">
+            <label>Button 5:</label>
+            <select class="debug-dropdown">
+                <option value="hidden">Hidden</option>
+                <option value="shown">Shown</option>
+                <option value="shown-active">Shown & Active</option>
+            </select>
         </div>
         <button class="debug-save" id="debugSave">Save</button>
     </div>
