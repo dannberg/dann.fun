@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idle Clicker Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f0f0f0;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .counter {
+            font-size: 24px;
+            font-weight: bold;
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .click-button {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #333;
+            background-color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.1s;
+            position: fixed;
+            top: 25vh;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        .click-button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .click-button:active {
+            background-color: #e0e0e0;
+        }
+
+        .shop {
+            display: none;
+            position: fixed;
+            bottom: 33.33vh;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .shop h1 {
+            font-size: 24px;
+            text-decoration: underline;
+            margin: 0 0 10px 0;
+            color: black;
+        }
+
+        .shop-item {
+            display: none;
+            margin: 5px 0;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shop-item button {
+            padding: 5px 10px;
+            border: 1px solid #333;
+            background-color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .shop-item.affordable {
+            color: black;
+        }
+
+        .shop-item.unaffordable {
+            color: #cccccc;
+        }
+
+        .shop-item.unaffordable button {
+            color: #cccccc;
+            border-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .shop-item span {
+            font-size: 14px;
+        }
+
+        .messages {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            height: 280px;
+            background-color: #fff;
+            border: 2px solid #333;
+            padding: 10px;
+            overflow-y: auto;
+            z-index: 10;
+        }
+
+        .messages h1 {
+            font-size: 24px;
+            text-decoration: underline;
+            margin: 0 0 10px 0;
+            color: black;
+        }
+
+        .message {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 2px 0;
+            white-space: pre-wrap;
+            line-height: 1.2;
+        }
+
+        .debug-window {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 250px;
+            background-color: #fff;
+            border: 2px solid #333;
+            padding: 15px;
+            z-index: 20;
+        }
+
+        .debug-window h3 {
+            margin: 0 0 10px 0;
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .debug-timer {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .debug-timer-display {
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .debug-timer-reset {
+            padding: 3px 8px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 10px;
+            border-radius: 3px;
+        }
+
+        .debug-timer-reset:hover {
+            background-color: #555;
+        }
+
+        .debug-stats {
+            margin-bottom: 10px;
+        }
+
+        .debug-stat {
+            margin: 2px 0;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .debug-stats-inline {
+            display: flex;
+            gap: 15px;
+        }
+
+        .debug-field {
+            margin: 5px 0;
+        }
+
+        .debug-field label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 2px;
+        }
+
+        .debug-field input {
+            width: 60%;
+            padding: 2px 5px;
+            font-size: 12px;
+            border: 1px solid #ccc;
+        }
+
+        .debug-save {
+            width: 100%;
+            padding: 5px;
+            margin-top: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .debug-save:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="counter" id="counter">0</div>
+    <button class="click-button" id="clickButton">Click</button>
+    <div class="shop" id="shop">
+        <h1>Shop</h1>
+        <div class="shop-item" id="shopItem1">
+            <button id="buyButton1">30</button>
+            <span id="shopItem1Desc">+2 per click</span>
+        </div>
+        <div class="shop-item" id="shopItem2">
+            <button id="buyButton2">150</button>
+            <span id="shopItem2Desc">+4 per click</span>
+        </div>
+    </div>
+
+    <div class="messages" id="messages">
+        <h1>Messages</h1>
+        <div id="messagesContainer"></div>
+    </div>
+
+    <div class="debug-window" id="debugWindow">
+        <h3>Debug</h3>
+        <div class="debug-timer">
+            <div class="debug-timer-display" id="debugTimer">00:00:00</div>
+            <button class="debug-timer-reset" id="debugTimerReset">Reset</button>
+        </div>
+        <div class="debug-stats">
+            <div class="debug-stats-inline">
+                <div class="debug-stat">Clicks: <span id="debugClicks">0</span></div>
+                <div class="debug-stat">CP: <span id="debugCP">1</span></div>
+            </div>
+        </div>
+        <div class="debug-field">
+            <label for="debugCount">Update count:</label>
+            <input type="number" id="debugCount" placeholder="Enter count">
+        </div>
+        <div class="debug-field">
+            <label for="debugClickPower">Update clicks per click:</label>
+            <input type="number" id="debugClickPower" placeholder="Enter click power">
+        </div>
+        <button class="debug-save" id="debugSave">Save</button>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        let clickPower = 1;
+        let hasClicked = false;
+        let shopItemCost = 30;
+        let shopItemVisible = false;
+        let shopItem2Cost = 150;
+        let shopItem2Visible = false;
+        let shopItem1Quantity = 0;
+        let shopItem2Quantity = 0;
+        let messagesVisible = false;
+        let messageCount = 0;
+        
+        // Timer variables
+        let startTime = Date.now();
+        let timerInterval = null;
+        let physicalClicks = 0;
+        
+        // Messages array - each message has a threshold and text
+        const messageList = [
+            { threshold: 1500, text: "You're doing great..." },
+            { threshold: 2000, text: "Keep clicking..." }
+        ];
+        
+        // Track which messages have already been shown
+        const shownMessages = new Set();
+        
+        // Debug flag - set to true to enable debug window
+        const DEBUG_MODE = true;
+
+        const counter = document.getElementById('counter');
+        const clickButton = document.getElementById('clickButton');
+        const shop = document.getElementById('shop');
+        const shopItem = document.getElementById('shopItem1');
+        const buyButton = document.getElementById('buyButton1');
+        const shopItem2 = document.getElementById('shopItem2');
+        const buyButton2 = document.getElementById('buyButton2');
+        const shopItem1Desc = document.getElementById('shopItem1Desc');
+        const shopItem2Desc = document.getElementById('shopItem2Desc');
+        const messages = document.getElementById('messages');
+        const messagesContainer = document.getElementById('messagesContainer');
+        const debugWindow = document.getElementById('debugWindow');
+        const debugCount = document.getElementById('debugCount');
+        const debugClickPower = document.getElementById('debugClickPower');
+        const debugSave = document.getElementById('debugSave');
+        const debugTimer = document.getElementById('debugTimer');
+        const debugTimerReset = document.getElementById('debugTimerReset');
+        const debugClicks = document.getElementById('debugClicks');
+        const debugCP = document.getElementById('debugCP');
+
+        // Initialize debug window based on flag
+        if (DEBUG_MODE) {
+            debugWindow.style.display = 'block';
+        }
+
+        // Timer functions
+        function startTimer() {
+            startTime = Date.now();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const elapsed = Date.now() - startTime;
+            const hours = Math.floor(elapsed / 3600000);
+            const minutes = Math.floor((elapsed % 3600000) / 60000);
+            const seconds = Math.floor((elapsed % 60000) / 1000);
+            
+            debugTimer.textContent = 
+                String(hours).padStart(2, '0') + ':' +
+                String(minutes).padStart(2, '0') + ':' +
+                String(seconds).padStart(2, '0');
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            startTime = Date.now();
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        // Timer reset event listener
+        debugTimerReset.addEventListener('click', resetTimer);
+
+        // Function to format numbers with commas
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // Function to check and trigger messages
+        function checkMessages() {
+            // Show messages panel if not already visible
+            if (!messagesVisible) {
+                messagesVisible = true;
+                messages.style.display = 'block';
+            }
+            
+            // Find all messages that should be triggered at this click count and haven't been shown yet
+            const messagesToShow = messageList.filter(message => 
+                clickCount >= message.threshold && !shownMessages.has(message.threshold)
+            );
+            
+            // Show all applicable messages in order with delays
+            messagesToShow.forEach((message, index) => {
+                // Mark this message as shown
+                shownMessages.add(message.threshold);
+                
+                setTimeout(() => {
+                    typeMessage(message.text);
+                }, index * 2000); // 2 second delay between messages
+            });
+        }
+
+        // Function to trigger all events based on current click count
+        function triggerAllEvents() {
+            // Show counter if not already shown
+            if (!hasClicked) {
+                hasClicked = true;
+                counter.style.display = 'block';
+            }
+
+            // Update button text at 15 clicks
+            if (clickCount >= 15) {
+                clickButton.textContent = 'Keep Clicking';
+            }
+
+            // Show shop at 30 clicks
+            if (clickCount >= 30 && shop.style.display !== 'block') {
+                shop.style.display = 'block';
+            }
+
+            // Show shop item when it can be afforded for the first time
+            if (clickCount >= shopItemCost && !shopItemVisible) {
+                shopItemVisible = true;
+                shopItem.style.display = 'flex';
+            }
+
+            // Show shop item 2 when it can be afforded for the first time
+            if (clickCount >= shopItem2Cost && !shopItem2Visible) {
+                shopItem2Visible = true;
+                shopItem2.style.display = 'flex';
+            }
+
+            // Check and trigger messages
+            checkMessages();
+
+            // Update shop item affordability
+            updateShopItemAffordability();
+        }
+
+        // Debug save functionality
+        function saveDebugValues() {
+            const newCount = parseInt(debugCount.value);
+            const newClickPower = parseInt(debugClickPower.value);
+            
+            if (!isNaN(newCount)) {
+                clickCount = newCount;
+                counter.textContent = formatNumber(clickCount);
+                debugCount.value = '';
+            }
+            
+            if (!isNaN(newClickPower)) {
+                clickPower = newClickPower;
+                debugClickPower.value = '';
+                debugCP.textContent = clickPower;
+            }
+            
+            // Trigger all events that should have been triggered at this click count
+            triggerAllEvents();
+        }
+
+        // Save button click event
+        debugSave.addEventListener('click', saveDebugValues);
+
+        // Enter key events for input fields
+        debugCount.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                saveDebugValues();
+            }
+        });
+
+        debugClickPower.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                saveDebugValues();
+            }
+        });
+
+        clickButton.addEventListener('click', function() {
+            // Track physical clicks
+            physicalClicks++;
+            debugClicks.textContent = physicalClicks;
+            debugCP.textContent = clickPower;
+
+            // First click - show counter and start timer
+            if (!hasClicked) {
+                hasClicked = true;
+                counter.style.display = 'block';
+                startTimer();
+            }
+
+            // Increase click count
+            clickCount += clickPower;
+            counter.textContent = formatNumber(clickCount);
+
+            // Trigger all events that should be triggered at this click count
+            triggerAllEvents();
+        });
+
+        buyButton.addEventListener('click', function() {
+            if (clickCount >= shopItemCost) {
+                // Deduct cost from click count
+                clickCount -= shopItemCost;
+                counter.textContent = formatNumber(clickCount);
+
+                // Increase click power
+                clickPower += 2;
+                debugCP.textContent = clickPower;
+
+                // Increase quantity
+                shopItem1Quantity++;
+                shopItem1Desc.textContent = `+2 per click (qty: ${shopItem1Quantity})`;
+
+                // Increase cost by 1.1x and round to nearest integer
+                shopItemCost = Math.round(shopItemCost * 1.1);
+                buyButton.textContent = shopItemCost;
+
+                // Update affordability
+                updateShopItemAffordability();
+            }
+        });
+
+        buyButton2.addEventListener('click', function() {
+            if (clickCount >= shopItem2Cost) {
+                // Deduct cost from click count
+                clickCount -= shopItem2Cost;
+                counter.textContent = formatNumber(clickCount);
+
+                // Increase click power
+                clickPower += 4;
+                debugCP.textContent = clickPower;
+
+                // Increase quantity
+                shopItem2Quantity++;
+                shopItem2Desc.textContent = `+4 per click (qty: ${shopItem2Quantity})`;
+
+                // Increase cost by 1.1x and round to nearest integer
+                shopItem2Cost = Math.round(shopItem2Cost * 1.1);
+                buyButton2.textContent = shopItem2Cost;
+
+                // Update affordability
+                updateShopItemAffordability();
+            }
+        });
+
+        function updateShopItemAffordability() {
+            if (shopItemVisible) {
+                if (clickCount >= shopItemCost) {
+                    shopItem.className = 'shop-item affordable';
+                } else {
+                    shopItem.className = 'shop-item unaffordable';
+                }
+            }
+            
+            if (shopItem2Visible) {
+                if (clickCount >= shopItem2Cost) {
+                    shopItem2.className = 'shop-item affordable';
+                } else {
+                    shopItem2.className = 'shop-item unaffordable';
+                }
+            }
+        }
+
+        function typeMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            messagesContainer.appendChild(messageDiv);
+            messageCount++;
+            
+            // Remove oldest message if we have more than 10
+            if (messageCount > 10) {
+                const firstMessage = messagesContainer.firstChild;
+                if (firstMessage && firstMessage.className === 'message') {
+                    messagesContainer.removeChild(firstMessage);
+                    messageCount--;
+                }
+            }
+            
+            let index = 0;
+            const fullText = `> ${text}`;
+            
+            function typeChar() {
+                if (index < fullText.length) {
+                    messageDiv.textContent += fullText.charAt(index);
+                    index++;
+                    setTimeout(typeChar, 50); // 50ms delay between characters
+                } else {
+                    // Auto-scroll to bottom after typing is complete
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            }
+            
+            typeChar();
+        }
+    </script>
+</body>
+</html>
