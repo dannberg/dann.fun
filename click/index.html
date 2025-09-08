@@ -109,16 +109,29 @@
             height: 280px;
             background-color: #fff;
             border: 2px solid #333;
-            padding: 10px;
-            overflow-y: auto;
             z-index: 10;
+            overflow: hidden;
         }
 
         .messages h1 {
             font-size: 24px;
             text-decoration: underline;
-            margin: 0 0 10px 0;
+            margin: 0;
+            padding: 10px 10px 10px 10px;
             color: black;
+            background-color: #fff;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .messages-container {
+            height: 220px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         .message {
@@ -241,7 +254,7 @@
 
     <div class="messages" id="messages">
         <h1>Messages</h1>
-        <div id="messagesContainer"></div>
+        <div class="messages-container" id="messagesContainer"></div>
     </div>
 
     <div class="debug-window" id="debugWindow">
@@ -287,6 +300,17 @@
         
         // Messages array - each message has a threshold and text
         const messageList = [
+            { threshold: 100, text: "This is the first test message. Let's see how this goes." },
+            { threshold: 200, text: "Wow, the second test message is here. This is getting interesting." },
+            { threshold: 300, text: "Okay, now we're getting somewhere. This is starting to look like a real game." },
+            { threshold: 400, text: "Here's another message. Fun fun fun." },
+            { threshold: 500, text: "The fifth test message is here. Let's keep it going." },
+            { threshold: 600, text: "Okay, now we're getting somewhere. This is starting to look like a real game." },
+            { threshold: 700, text: "Here's another message. Fun fun fun." },
+            { threshold: 800, text: "The fifth test message is here. Let's keep it going." },
+            { threshold: 900, text: "Okay, now we're getting somewhere. This is starting to look like a real game." },
+            { threshold: 1000, text: "Here's another message. Fun fun fun." },
+            { threshold: 1100, text: "The fifth test message is here. Let's keep it going." },
             { threshold: 1500, text: "You're doing great..." },
             { threshold: 2000, text: "Keep clicking..." }
         ];
@@ -541,14 +565,16 @@
         function typeMessage(text) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message';
-            messagesContainer.appendChild(messageDiv);
+            
+            // Insert new message at the top (after the header)
+            messagesContainer.insertBefore(messageDiv, messagesContainer.firstChild);
             messageCount++;
             
             // Remove oldest message if we have more than 10
             if (messageCount > 10) {
-                const firstMessage = messagesContainer.firstChild;
-                if (firstMessage && firstMessage.className === 'message') {
-                    messagesContainer.removeChild(firstMessage);
+                const lastMessage = messagesContainer.lastChild;
+                if (lastMessage && lastMessage.className === 'message') {
+                    messagesContainer.removeChild(lastMessage);
                     messageCount--;
                 }
             }
@@ -562,8 +588,8 @@
                     index++;
                     setTimeout(typeChar, 50); // 50ms delay between characters
                 } else {
-                    // Auto-scroll to bottom after typing is complete
-                    messages.scrollTop = messages.scrollHeight;
+                    // Keep scroll at top to show newest messages
+                    messagesContainer.scrollTop = 0;
                 }
             }
             
