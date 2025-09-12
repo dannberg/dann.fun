@@ -381,16 +381,16 @@
 
         // Function to check and trigger messages
         function checkMessages() {
-            // Show messages panel if not already visible
-            if (!messagesVisible) {
-                messagesVisible = true;
-                messages.style.display = 'block';
-            }
-            
             // Find all messages that should be triggered at this click count and haven't been shown yet
             const messagesToShow = messageList.filter(message => 
                 clickCount >= message.threshold && !shownMessages.has(message.threshold)
             );
+            
+            // Only show messages panel if we have messages to show and it's not already visible
+            if (messagesToShow.length > 0 && !messagesVisible) {
+                messagesVisible = true;
+                messages.style.display = 'block';
+            }
             
             // Show all applicable messages in order with delays
             messagesToShow.forEach((message, index) => {
