@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan Winter 2026 — Dann & Avi</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1614;
+  --paper: #f5f0ea;
+  --accent: #c4463a;
+  --accent-soft: #e8d5c4;
+  --muted: #8a7e74;
+  --border: #d8cfc5;
+  --card-bg: #faf7f3;
+  --highlight: #fff8f0;
+  --tag-culture: #3b5998;
+  --tag-food: #c4463a;
+  --tag-denim: #2d4a22;
+  --tag-nature: #6b8e5a;
+  --tag-transport: #7a6850;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hero {
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 60px 24px 40px;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #1a1614 0%, #2d2622 60%, #4a3f37 100%);
+  color: #f5f0ea;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f5f0ea' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.5;
+}
+
+.hero-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(42px, 8vw, 72px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.hero h1 em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.hero-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-style: italic;
+  color: #b8a99a;
+  position: relative;
+}
+
+.hero-dates {
+  margin-top: 24px;
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #b8a99a;
+  position: relative;
+}
+
+.hero-dates .sep { color: var(--accent); font-size: 18px; }
+
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Overview section */
+.overview {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.overview h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.overview p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.tip-box {
+  background: var(--highlight);
+  border-left: 3px solid var(--accent);
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 14px;
+  color: var(--ink);
+  border-radius: 0 6px 6px 0;
+}
+
+.tip-box strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Day cards */
+.day-section {
+  padding: 40px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.day-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.day-number {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.day-date {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.day-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.day-location {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--border);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -25px;
+  top: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--paper);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.time-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.timeline-item h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.timeline-item p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  color: #fff;
+}
+
+.tag-culture { background: var(--tag-culture); }
+.tag-food { background: var(--tag-food); }
+.tag-denim { background: var(--tag-denim); }
+.tag-nature { background: var(--tag-nature); }
+.tag-transport { background: var(--tag-transport); }
+
+.night-box {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.night-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.night-box .night-text {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.night-box .night-text strong {
+  color: var(--ink);
+}
+
+/* Logistics footer */
+.logistics {
+  padding: 48px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.logistics h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.logistics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .logistics-grid { grid-template-columns: 1fr; }
+}
+
+.logistics-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 18px;
+}
+
+.logistics-card h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.logistics-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.footer-note {
+  text-align: center;
+  padding: 40px 24px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--muted);
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">Winter 2026</div>
+  <h1>Japan: <em>A Cultural Journey</em></h1>
+  <div class="hero-sub">Tokyo · Nagano · Kyoto — for Dann & Avi</div>
+  <div class="hero-dates">
+    <span>Dec 23</span>
+    <span class="sep">→</span>
+    <span>Dec 31</span>
+    <span class="sep">·</span>
+    <span>9 Days</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="overview">
+    <h2>The Route</h2>
+    <p>This itinerary moves north before south: you'll land in Tokyo, settle in for two days, then take the Shinkansen north to Nagano for the snow monkeys and an overnight onsen stay. From there, head south to Kyoto for three nights of temples, kaiseki, and a Nara day trip, before returning to Tokyo for New Year's Eve — with a stop at Iron Heart along the way.</p>
+    <p>The pace is busy but with breathing room built in: mornings are structured, afternoons leave space to wander, and evenings are anchored by great meals.</p>
+    <div class="tip-box">
+      <strong>JR Pass verdict:</strong> With Tokyo → Nagano round-trip (~¥16,000) plus Tokyo → Kyoto round-trip (~¥27,000) plus local JR rides, your total JR fares will approach ~¥50,000. A 7-day JR Pass (¥50,000) is borderline — consider individual tickets via SmartEX for flexibility and Nozomi access, or grab the pass if you value convenience. Either way, get Suica/Pasmo on your phones for local transit.
+    </div>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-number">01</div>
+      <div class="day-date">Tuesday, Dec 23</div>
+    </div>
+    <div class="day-title">Arrival & Shinjuku by Night</div>
+    <div class="day-location">Tokyo — Shinjuku</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">Afternoon</div>
+        <h4>Land at Narita (NRT)</h4>
+        <p>Take the Narita Express (N'EX) to Shinjuku Station (~90 min). Check into your hotel, freshen up, decompress.</p>
+        <div class="tags"><span class="tag tag-transport">Transit</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Evening</div>
+        <h4>Golden Gai & Omoide Yokocho</h4>
+        <p>Shake off the jet lag with a walk through the neon-lit alleyways of Shinjuku. Start at Omoide Yokocho ("Memory Lane") for yakitori under the smoke, then wander the tiny bars of Golden Gai. No agenda — just absorb the energy.</p>
+        <div class="tags"><span class="tag tag-food">Food</span><span class="tag tag-culture">Culture</span></div>
+      </div>
+    </div>
+    <div class="night-box">
+      <div class="night-icon">🏨</div>
+      <div class="night-text"><strong>Stay: Shinjuku area</strong> — Good base for transit. Consider Hotel Gracery, Hyatt Regency, or a boutique option in Kabukicho.</div>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-number">02</div>
+      <div class="day-date">Wednesday, Dec 24</div>
+    </div>
+    <div class="day-title">Classic Tokyo & Christmas Eve Omakase</div>
+    <div class="day-location">Tokyo — Asakusa · Ginza · Shibuya</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">Morning</div>
+        <h4>Senso-ji & Asakusa</h4>
+        <p>Visit Tokyo's oldest temple early before crowds build. Walk through Nakamise-dori for snacks (melon pan, senbei). The winter morning light on the five-story pagoda is gorgeous.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Midday</div>
+        <h4>Tsukiji Outer Market</h4>
+        <p>Hop on the Ginza Line to Tsukiji for a seafood lunch grazing session — tamagoyaki, fresh uni, grilled scallops. The outer market is still thriving and very much worth visiting.</p>
+        <div class="tags"><span class="tag tag-food">Food</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Afternoon</div>
+        <h4>Meiji Shrine & Harajuku</h4>
+        <p>Walk the forested path to Meiji Jingu for a moment of stillness. Then contrast it with a stroll through Takeshita-dori and the Omotesando designer boulevard. Pop into any shops that catch your eye.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Evening</div>
+        <h4>Christmas Eve Omakase</h4>
+        <p>Christmas Eve is a big date night in Japan — lean into it. Book a splurge-worthy omakase: <strong>Sushi Ryo</strong> (Ginza, 8-seat counter, incredible Edomae style), <strong>Kyubey</strong> (Ginza institution), or <strong>Sushi Koshikawa</strong> (affordable luxury in Kichijoji). Book well in advance via Omakase.in or TableAll.</p>
+        <div class="tags"><span class="tag tag-food">Splurge Meal</span></div>
+      </div>
+    </div>
+    <div class="night-box">
+      <div class="night-icon">🌃</div>
+      <div class="night-text"><strong>After dinner:</strong> Walk through Marunouchi illuminations (~775,000 LEDs along Naka-dori street). It's peak Christmas magic.</div>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-number">03</div>
+      <div class="day-date">Thursday, Dec 25</div>
+    </div>
+    <div class="day-title">Snow Monkeys & Onsen</div>
+    <div class="day-location">Tokyo → Nagano → Yamanouchi</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">Early Morning</div>
+        <h4>Hokuriku Shinkansen to Nagano</h4>
+        <p>Catch an early bullet train from Tokyo Station to Nagano (~80 min). From Nagano Station, take the Nagaden Express Bus to the Snow Monkey Park stop (~40 min).</p>
+        <div class="tags"><span class="tag tag-transport">Transit</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Late Morning</div>
+        <h4>Jigokudani Monkey Park</h4>
+        <p>Walk the forest trail (~30 min) to reach the hot spring pool. Late December is prime season — expect snow-dusted macaques soaking contentedly in steaming water. Spend 1.5–2 hours watching the troop. Dress warmly (expect ~20°F / -5°C). Sturdy, waterproof shoes are a must.</p>
+        <div class="tags"><span class="tag tag-nature">Nature</span><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Afternoon</div>
+        <h4>Shibu Onsen Check-in</h4>
+        <p>Head to nearby Shibu Onsen, a charming hot spring village with narrow stone lanes and wooden ryokan. Check in and spend the afternoon doing the famous nine public bathhouse circuit (ryokan guests get free access). Each bath is said to cure a different ailment.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span><span class="tag tag-nature">Nature</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Evening</div>
+        <h4>Kaiseki dinner at ryokan</h4>
+        <p>Most ryokan include a multi-course kaiseki dinner. Let the staff bring dish after dish to your room while you sit in your yukata, warm from the baths. This will be one of the most memorable nights of the trip.</p>
+        <div class="tags"><span class="tag tag-food">Splurge Meal</span></div>
+      </div>
+    </div>
+    <div class="night-box">
+      <div class="night-icon">♨️</div>
+      <div class="night-text"><strong>Stay: Ryokan in Shibu Onsen</strong> — Look at Kanaguya (historic, stunning), Shibu Hotel, or Yamazakiya. Book early — Christmas week fills up.</div>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-number">04</div>
+      <div class="day-date">Friday, Dec 26</div>
+    </div>
+    <div class="day-title">Zenko-ji & Transit to Kyoto</div>
+    <div class="day-location">Nagano → Kyoto</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">Morning</div>
+        <h4>Zenko-ji Temple, Nagano</h4>
+        <p>Head back to Nagano City for a visit to one of Japan's most important Buddhist temples, founded in the 7th century. Walk the atmospheric approach road lined with shops selling oyaki (savory steamed buns) and local sake. Don't miss the pitch-black tunnel beneath the altar — touching the "Key to Paradise" in total darkness is unforgettable.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Midday</div>
+        <h4>Shinkansen to Kyoto</h4>
+        <p>Take the Hokuriku Shinkansen from Nagano to Kanazawa, then transfer to the Thunderbird limited express to Kyoto (~4 hours total). Alternatively, backtrack to Tokyo and take the Tokaido Shinkansen to Kyoto (~2+2 hours). Settle into your Kyoto hotel.</p>
+        <div class="tags"><span class="tag tag-transport">Transit</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Evening</div>
+        <h4>Pontocho Alley</h4>
+        <p>Stroll the narrow lantern-lit Pontocho alley along the Kamo River. Pick a riverside restaurant for dinner — many have outdoor terrace seating even in winter. The atmospheric glow of this historic geisha district is extraordinary at night.</p>
+        <div class="tags"><span class="tag tag-food">Food</span><span class="tag tag-culture">Culture</span></div>
+      </div>
+    </div>
+    <div class="night-box">
+      <div class="night-icon">🏯</div>
+      <div class="night-text"><strong>Stay: Central Kyoto</strong> — 3 nights. Consider The Hotel Granvia (above the station), Kyoto Hotel Okura (Kawaramachi), or a machiya townhouse rental for atmosphere.</div>
+    </div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-number">05</div>
+      <div class="day-date">Saturday, Dec 27</div>
+    </div>
+    <div class="day-title">Kyoto's Greatest Hits</div>
+    <div class="day-location">Kyoto — Eastern Higashiyama</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">Early Morning</div>
+        <h4>Fushimi Inari Taisha</h4>
+        <p>Get there at opening to walk the seemingly endless vermillion torii gates with minimal crowds. You don't need to hike the full loop — the first 20 minutes up gives you the iconic shots. Early morning winter light filtering through thousands of gates is otherworldly.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Morning</div>
+        <h4>Kiyomizu-dera</h4>
+        <p>One of Kyoto's most celebrated temples, perched on a hillside with sweeping views of the city. The wooden stage juts out over the valley — in winter, the bare maple branches frame the view beautifully. Walk down through the charming Higashiyama Sannen-zaka and Ninen-zaka lanes below.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Afternoon</div>
+        <h4>Gion & Tea</h4>
+        <p>Wander through the traditional Gion district. Pop into a tea house for matcha and wagashi (traditional sweets). Walk along Shirakawa canal — the old wooden machiya houses and willow trees are postcard-perfect. If you're lucky, you might spot a maiko heading to an evening engagement.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span><span class="tag tag-food">Food</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Evening</div>
+        <h4>Kaiseki in Gion</h4>
+        <p>This is your Kyoto fine dining night. Kaiseki is Kyoto's highest culinary art — a multi-course meal that follows the seasons. Look at <strong>Gion Sasaki</strong> (2 Michelin stars), <strong>Kikunoi Honten</strong> (3 stars), or <strong>Gion Maruyama</strong> for something more approachable but still exceptional.</p>
+        <div class="tags"><span class="tag tag-food">Splurge Meal</span></div>
+      </div>
+    </div>
+    <div class="night-box">
+      <div class="night-icon">🍵</div>
+      <div class="night-text"><strong>Tip:</strong> Michelin kaiseki spots book weeks or months out. Reserve ASAP — holiday week is peak season. Use Omakase.in, Pocket Concierge, or your hotel concierge.</div>
+    </div>
+  </div>
+
+  <!-- DAY 6 -->
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-number">06</div>
+      <div class="day-date">Sunday, Dec 28</div>
+    </div>
+    <div class="day-title">Nara Day Trip — Deer & the Great Buddha</div>
+    <div class="day-location">Day trip: Kyoto → Nara → Kyoto</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">Morning</div>
+        <h4>Train to Nara</h4>
+        <p>Take the Kintetsu Limited Express from Kyoto (~35 min) to Nara. It's compact and walkable — perfect for a day trip. Head straight to Nara Park where over 1,000 sacred deer roam freely.</p>
+        <div class="tags"><span class="tag tag-transport">Transit</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Late Morning</div>
+        <h4>Todai-ji Temple</h4>
+        <p>Home to the Great Buddha (Daibutsu) — a 15-meter-tall bronze statue housed inside the largest wooden building in the world. The scale is staggering even if you've seen photos. Walk through the Nandaimon Gate with its fierce guardian statues on the way in.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Afternoon</div>
+        <h4>Kasuga Taisha & Naramachi</h4>
+        <p>Walk the path lined with thousands of stone lanterns to Kasuga Grand Shrine. Then explore the old merchant quarter of Naramachi — narrow streets with well-preserved townhouses, small museums, and craft shops. Great for picking up souvenirs.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Evening</div>
+        <h4>Return to Kyoto</h4>
+        <p>Head back to Kyoto for a relaxed evening. Try a local izakaya near your hotel or explore Nishiki Market (the "Kitchen of Kyoto") for street food — pickles, grilled mochi, and seasonal treats.</p>
+        <div class="tags"><span class="tag tag-food">Food</span></div>
+      </div>
+    </div>
+    <div class="night-box">
+      <div class="night-icon">🦌</div>
+      <div class="night-text"><strong>Nara tip:</strong> Buy shika senbei (deer crackers, ¥200) and prepare for the deer to mob you enthusiastically. They bow for treats — it's charming.</div>
+    </div>
+  </div>
+
+  <!-- DAY 7 -->
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-number">07</div>
+      <div class="day-date">Monday, Dec 29</div>
+    </div>
+    <div class="day-title">Arashiyama & Golden Pavilion</div>
+    <div class="day-location">Kyoto — West Side</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">Morning</div>
+        <h4>Arashiyama Bamboo Grove</h4>
+        <p>Take the JR San-in Line to Saga-Arashiyama. Walk through the towering bamboo forest early — the sound of the wind through the stalks is meditative. Continue to Tenryu-ji temple and its stunning garden (a UNESCO World Heritage site).</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span><span class="tag tag-nature">Nature</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Late Morning</div>
+        <h4>Iwatayama Monkey Park</h4>
+        <p>If you want a second monkey fix, climb the hill in Arashiyama for panoramic city views and more macaques — these are the same species as the snow monkeys but in a different setting.</p>
+        <div class="tags"><span class="tag tag-nature">Nature</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Afternoon</div>
+        <h4>Kinkaku-ji (Golden Pavilion)</h4>
+        <p>Head north to the iconic Golden Pavilion. The gold-leaf temple reflected in the mirror pond is breathtaking — and if there's any chance of snow, it becomes one of the most photographed scenes in all of Japan. Winter is the best season for a dusting of white on the golden roof.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Evening</div>
+        <h4>Kyoto Station Ramen & Pack Up</h4>
+        <p>For your last Kyoto evening, hit Kyoto Ramen Street on the 10th floor of the station building — a row of famous ramen shops from across Japan. Pick your style and slurp with abandon before packing for tomorrow's move.</p>
+        <div class="tags"><span class="tag tag-food">Food</span></div>
+      </div>
+    </div>
+    <div class="night-box">
+      <div class="night-icon">🎋</div>
+      <div class="night-text"><strong>Last night in Kyoto.</strong> Consider a final evening stroll through Gion or along the Kamo River.</div>
+    </div>
+  </div>
+
+  <!-- DAY 8 -->
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-number">08</div>
+      <div class="day-date">Tuesday, Dec 30</div>
+    </div>
+    <div class="day-title">Iron Heart Pilgrimage & Tokyo Return</div>
+    <div class="day-location">Kyoto → Tokyo → Hachioji → Shibuya</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">Morning</div>
+        <h4>Shinkansen back to Tokyo</h4>
+        <p>Take the Hikari Shinkansen from Kyoto to Tokyo (~2h 20min). Drop bags at your Tokyo hotel.</p>
+        <div class="tags"><span class="tag tag-transport">Transit</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Midday</div>
+        <h4>Iron Heart HQ — Hachioji</h4>
+        <p>Take the JR Chuo Line from Shinjuku to Hachioji Station (~45 min), then a bus or taxi (~15 min) to the Iron Heart flagship at 733-19 Utsukimachi. <strong>Hours: Wed–Sun 11:00–18:00</strong> (closed Mon/Tue, so Tuesday Dec 30 won't work — see note below). Browse their full range of heavyweight selvedge, try things on, and have them call you a taxi back to the station (~¥2,000).</p>
+        <div class="tags"><span class="tag tag-denim">Denim</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Afternoon</div>
+        <h4>Shibuya & Shimokitazawa</h4>
+        <p>Back in central Tokyo, explore Shibuya Crossing, then take the Keio-Inokashira Line to Shimokitazawa — Tokyo's vintage clothing and thrift store paradise. Great for raw denim hunting at shops like Bears, Flamingo, and various secondhand spots.</p>
+        <div class="tags"><span class="tag tag-denim">Denim</span><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Evening</div>
+        <h4>Pre–New Year's Eve dinner</h4>
+        <p>Go for something fun and lively — a high-end yakitori spot like Birdland (Ginza) or an izakaya crawl through Ebisu Yokocho. Keep it casual since tomorrow is the main event.</p>
+        <div class="tags"><span class="tag tag-food">Food</span></div>
+      </div>
+    </div>
+    <div class="night-box">
+      <div class="night-icon">👖</div>
+      <div class="night-text"><strong>⚠️ Iron Heart schedule note:</strong> The store is closed Mon & Tue. Dec 30 is a Tuesday. You have two options: (1) visit on Day 7 (Mon Dec 29) — also closed, so that won't work either. Best bet: <strong>rearrange to visit on Day 2 (Wed Dec 24) or Day 4 (Fri Dec 26 before Kyoto train) or Day 5 (Sat Dec 27)</strong>. The most practical option is to go on Dec 24 afternoon before your omakase — take the Chuo Line from Shinjuku to Hachioji, browse Iron Heart, and head back to Ginza for dinner. Alternatively, visit the <strong>Iron Heart Osaka store</strong> as a quick stop from Kyoto (30 min by train).</div>
+    </div>
+  </div>
+
+  <!-- DAY 9 -->
+  <div class="day-section">
+    <div class="day-header">
+      <div class="day-number">09</div>
+      <div class="day-date">Wednesday, Dec 31</div>
+    </div>
+    <div class="day-title">New Year's Eve & Departure</div>
+    <div class="day-location">Tokyo</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-label">Morning</div>
+        <h4>Toyosu Market (if your flight is late)</h4>
+        <p>If you have time before heading to the airport, visit the Toyosu Fish Market for a final sushi breakfast. The tuna auction viewing gallery opens early. Otherwise, enjoy a leisurely hotel breakfast and soak in your last Tokyo morning.</p>
+        <div class="tags"><span class="tag tag-food">Food</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Midday</div>
+        <h4>Last-minute shopping</h4>
+        <p>Nakamise-dori (Asakusa) or the Ginza underground malls are great for last-minute gifts — matcha Kit-Kats, wagashi, tenugui cloths, chopsticks. Don Quijote in Shibuya for the chaotic souvenir experience.</p>
+        <div class="tags"><span class="tag tag-culture">Culture</span></div>
+      </div>
+      <div class="timeline-item">
+        <div class="time-label">Afternoon / Evening</div>
+        <h4>Depart from Narita (NRT)</h4>
+        <p>Take the Narita Express back to the airport. Allow at least 2.5 hours before your flight. If your flight is late evening, consider attending Joya no Kane — the 108 bell strikes at a temple for New Year's Eve. Senso-ji is the most accessible option.</p>
+        <div class="tags"><span class="tag tag-transport">Transit</span></div>
+      </div>
+    </div>
+    <div class="night-box">
+      <div class="night-icon">✈️</div>
+      <div class="night-text"><strong>If your flight is on Jan 1 instead:</strong> Spend NYE at Senso-ji or Meiji Shrine for Hatsumode (first shrine visit of the new year). It's crowded but electric — one of Japan's most important traditions.</div>
+    </div>
+  </div>
+
+  <!-- LOGISTICS -->
+  <div class="logistics">
+    <h2>Practical Notes</h2>
+    <div class="logistics-grid">
+      <div class="logistics-card">
+        <h4>Getting Around</h4>
+        <p>Add Suica to Apple Wallet before you land. It works on virtually all trains, buses, and convenience stores. For Shinkansen, download the SmartEX app to book bullet train seats from your phone.</p>
+      </div>
+      <div class="logistics-card">
+        <h4>Connectivity</h4>
+        <p>Buy an eSIM before departure (Ubigi, Airalo, or Saily all work well in Japan). Activate it on the plane so you're connected at landing. Free WiFi in Japan is unreliable.</p>
+      </div>
+      <div class="logistics-card">
+        <h4>Weather</h4>
+        <p>Tokyo: 40–50°F (5–10°C), dry and sunny. Nagano: 20–30°F (-5 to 0°C) with snow. Kyoto: 35–45°F (2–7°C). Pack layers, a warm coat, waterproof shoes for Nagano, and a compact umbrella.</p>
+      </div>
+      <div class="logistics-card">
+        <h4>Reservations</h4>
+        <p>Book your omakase and kaiseki NOW — Christmas week is peak season. Use Omakase.in, TableAll, Pocket Concierge, or your hotel concierge. Ryokan in Shibu Onsen should also be booked ASAP.</p>
+      </div>
+      <div class="logistics-card">
+        <h4>Iron Heart Timing</h4>
+        <p>The Hachioji store is open Wed–Sun, 11am–6pm. Your best window is Wed Dec 24 afternoon or Sat/Sun Dec 27–28. Alternatively, the Osaka store is a 30-min train ride from Kyoto.</p>
+      </div>
+      <div class="logistics-card">
+        <h4>Holiday Heads-Up</h4>
+        <p>Dec 26–Jan 4 is Japan's New Year holiday. Some shops close Dec 31–Jan 1, but trains, convenience stores, and major attractions stay open. Temples will be packed on Jan 1.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    いってらっしゃい — Have a wonderful journey, Dann & Avi. 🇯🇵
+  </div>
+
+</div>
+
+</body>
+</html>
